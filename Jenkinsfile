@@ -23,17 +23,30 @@ pipeline {
             }
         }
 
-        stage('Push Image to DockerHub') {
-            steps {
-                withCredentials([string(credentialsId: 'docker-pass', variable: 'PASS')]) {
-                    sh """
-                        echo "$PASS" | docker login -u your-dockerhub-username --password-stdin
-                        docker push $DOCKER_REPO:${BUILD_NUMBER}
-                        docker push $DOCKER_REPO:latest
-                    """
-                }
-            }
+        
+    stage('Push to DockerHub') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                                          usernameVariable: 'DOCKERHUB_USER',
+                                          passwordVariable: 'DOCKERHUB_PASS')]) {
+          sh '''#!/usr/bin/env bash
+            set -euo pipefail
+    
+            # Always logout to avoid mixing sessions in shared agents
+            docker logout || true
+    
+            # Login securely via stdin; expansion is done by the shell, not Groovy
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USER" --password-stdin
+    
+            docker push "$DOCKER_REPO:${BUILD_NUMBER}"
+            docker push "$DOCKER_REPO:latest"
+    
+            docker logout
+          '''
         }
+      }
+    }
+
 
         stage('Deploy using Ansible') {
             steps {
