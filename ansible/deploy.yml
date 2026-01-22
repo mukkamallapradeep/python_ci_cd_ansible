@@ -1,0 +1,18 @@
+
+---
+- name: Deploy Flask Docker container
+  hosts: target
+  become: yes
+
+  vars:
+    container_name: flask_app
+
+  tasks:
+    - name: Stop existing container
+      shell: docker rm -f {{ container_name }} || true
+
+    - name: Pull new image
+      shell: docker pull {{ image_tag }}
+
+    - name: Run Flask container
+      shell: docker run -d --name {{ container_name }} -p 5000:5000 {{ image_tag }}
