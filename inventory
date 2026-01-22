@@ -1,2 +1,2 @@
 [target]
-172.31.76.181 ansible_user=ubutun
+172.31.76.181 ansible_user=ubutun ansible_ssh_common_args='-o StrictHostKeyChecking=no'
