@@ -1,2 +1,2 @@
 [target]
-<target-ec2-private-ip> ansible_user=ec2-user
+172.31.76.181 ansible_user=ubutun
