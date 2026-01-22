@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REPO = "your-dockerhub-username/flask-app"
+        DOCKER_REPO = "mpradeepdeepu/flask-ci-cd-demo"
         INVENTORY = "inventory"
     }
 
@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/youruser/flask-cicd-app.git'
+                git branch: 'main', url: 'https://github.com/youruser/python_ci_cd_ansible.git'
             }
         }
 
